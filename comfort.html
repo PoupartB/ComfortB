@@ -1,42 +1,44 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Échelle COMFORT-B - Cotation</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 800px;
+      max-width: 700px;
       margin: auto;
       padding: 20px;
     }
-    h1, h2 {
+    h1 {
       text-align: center;
     }
     .criterion {
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
     label {
       display: block;
-      margin: 5px 0;
-    }
-    .result {
-      margin-top: 30px;
-      font-size: 1.2em;
-      font-weight: bold;
-      text-align: center;
+      margin: 6px 0;
+      cursor: pointer;
     }
     button {
       display: block;
-      margin: auto;
+      margin: 25px auto;
       padding: 10px 20px;
-      font-size: 1em;
+      font-size: 1.1em;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 30px;
+      font-weight: bold;
+      font-size: 1.2em;
+      text-align: center;
+      white-space: pre-line;
     }
   </style>
 </head>
 <body>
   <h1>Échelle COMFORT-B</h1>
-
   <form id="comfortForm">
     <div class="criterion">
       <p><strong>Niveau de vigilance :</strong></p>
@@ -46,7 +48,6 @@
       <label><input type="radio" name="vigilance" value="4"> 4 – Alerte, agité</label>
       <label><input type="radio" name="vigilance" value="5"> 5 – Hypervigilant, ne tient pas en place</label>
     </div>
-
     <div class="criterion">
       <p><strong>Calme/agitation :</strong></p>
       <label><input type="radio" name="agitation" value="1" required> 1 – Très calme</label>
@@ -55,7 +56,6 @@
       <label><input type="radio" name="agitation" value="4"> 4 – Agité souvent</label>
       <label><input type="radio" name="agitation" value="5"> 5 – Très agité, mouvements incessants</label>
     </div>
-
     <div class="criterion">
       <p><strong>Respiration :</strong></p>
       <label><input type="radio" name="respiration" value="1" required> 1 – Respiration régulière, sans effort</label>
@@ -64,7 +64,6 @@
       <label><input type="radio" name="respiration" value="4"> 4 – Gémissements ou halètements</label>
       <label><input type="radio" name="respiration" value="5"> 5 – Pleurs ou respiration bruyante</label>
     </div>
-
     <div class="criterion">
       <p><strong>Mouvements corporels :</strong></p>
       <label><input type="radio" name="mouvements" value="1" required> 1 – Aucun mouvement</label>
@@ -73,7 +72,6 @@
       <label><input type="radio" name="mouvements" value="4"> 4 – Mouvements fréquents</label>
       <label><input type="radio" name="mouvements" value="5"> 5 – Mouvements intenses ou saccadés</label>
     </div>
-
     <div class="criterion">
       <p><strong>Tension musculaire :</strong></p>
       <label><input type="radio" name="tension" value="1" required> 1 – Muscles détendus</label>
@@ -82,7 +80,6 @@
       <label><input type="radio" name="tension" value="4"> 4 – Tension importante</label>
       <label><input type="radio" name="tension" value="5"> 5 – Tension extrême</label>
     </div>
-
     <div class="criterion">
       <p><strong>Expression faciale :</strong></p>
       <label><input type="radio" name="expression" value="1" required> 1 – Visage détendu</label>
@@ -91,7 +88,6 @@
       <label><input type="radio" name="expression" value="4"> 4 – Grimace visible</label>
       <label><input type="radio" name="expression" value="5"> 5 – Expression faciale très tendue</label>
     </div>
-
     <button type="submit">Calculer le score COMFORT-B</button>
   </form>
 
@@ -100,16 +96,26 @@
   <script>
     document.getElementById("comfortForm").addEventListener("submit", function(event) {
       event.preventDefault();
+
       const form = event.target;
-      const fields = ["vigilance", "agitation", "respiration", "mouvements", "tension", "expression"];
-      const score = fields.reduce((total, name) => total + parseInt(form[name].value), 0);
+      const criteria = ["vigilance", "agitation", "respiration", "mouvements", "tension", "expression"];
+
+      let totalScore = 0;
+      for (const c of criteria) {
+        totalScore += parseInt(form[c].value);
+      }
 
       let interpretation = "";
-      if (score < 11) interpretation = "Douleur ou inconfort faible ou absent";
-      else if (score <= 17) interpretation = "Douleur ou inconfort modéré";
-      else interpretation = "Douleur ou inconfort important nécessitant une prise en charge";
+      if (totalScore < 11) {
+        interpretation = "Douleur ou inconfort faible ou absent";
+      } else if (totalScore <= 17) {
+        interpretation = "Douleur ou inconfort modéré";
+      } else {
+        interpretation = "Douleur ou inconfort important nécessitant une prise en charge";
+      }
 
-      document.getElementById("comfortResult").innerText = `Score COMFORT-B : ${score} / 30\nInterprétation : ${interpretation}`;
+      document.getElementById("comfortResult").innerText = 
+        `Score COMFORT-B : ${totalScore} / 30\nInterprétation : ${interpretation}`;
     });
   </script>
 </body>
